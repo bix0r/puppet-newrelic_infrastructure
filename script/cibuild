@@ -4,6 +4,11 @@ set -e
 
 [ -z "${PUPPET_VERSION}" ] && script/bootstrap
 
+echo "Checking syntax"
+bundle exec rake syntax
+
+echo "Running specs"
 bundle exec rspec
 
+echo "Running puppet-lint"
 bundle exec puppet-lint --with-filename --fail-on-warnings manifests
