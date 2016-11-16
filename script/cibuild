@@ -18,4 +18,5 @@ bundle exec puppet-lint \
   --with-filename \
   --fail-on-warnings \
   --no-autoloader_layout-check \
+  --no-documentation-check \
   manifests
