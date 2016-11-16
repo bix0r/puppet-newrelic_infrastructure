@@ -1,0 +1,8 @@
+sudo: false
+language: ruby
+cache: bundler
+script: ./script/cibuild
+before_install:
+  - ./script/bootstrap
+notifications:
+  email: false
