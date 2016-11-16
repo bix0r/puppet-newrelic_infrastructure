@@ -3,12 +3,18 @@
 set -e
 
 [ -z "${PUPPET_VERSION}" ] && script/bootstrap
+echo -en 'travis_fold:start:bundler.update\r'
+gem install bundler --pre
+echo -en 'travis_fold:end:bundler.update\\r'
 
-echo "Checking syntax"
+echo -en 'travis_fold:start:rake.syntax\\r'
 bundle exec rake syntax
+echo -en 'travis_fold:end:rake.syntax\\r'
 
-echo "Running specs"
+echo -en 'travis_fold:start:rake.specs\\r'
 bundle exec rspec
+echo -en 'travis_fold:end:rake.specs\\r'
 
-echo "Running puppet-lint"
+echo -en 'travis_fold:start:rake.puppet-lint\\r'
 bundle exec puppet-lint --with-filename --fail-on-warnings manifests
+echo -en 'travis_fold:end:rake.puppet-lint\\r'

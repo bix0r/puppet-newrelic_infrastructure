@@ -8,7 +8,11 @@ rvm:
   - 2.3.0
 script: ./script/cibuild
 before_install:
+  - echo "travis_fold:start:bundler.update"
   - gem install bundler --pre
+  - echo "travis_fold:end:bundler.update"
+  - echo "travis_fold:start:script.bootstrap"
   - ./script/bootstrap
+  - echo "travis_fold:end:script.bootstrap"
 notifications:
   email: false
