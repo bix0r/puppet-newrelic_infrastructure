@@ -1,6 +1,15 @@
 class newrelic_infrastructure::install {
-  # - get the gpg key
-  # - add as an available source
+  include apt
+
+  apt::source { 'newrelic_infrastructure':
+    location => 'https://download.newrelic.com/infrastructure_agent/linux/apt',
+    repos    => 'main',
+    release  => $::lsbdistcodename,
+    key      => {
+      'id'     => 'A758B3FBCD43BE8D123A3476BB29EE038ECCE87C',
+      'source' => 'https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg'
+    }
+  }
 
   package { 'newrelic-infra':
     ensure => installed,
