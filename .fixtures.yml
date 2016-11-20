@@ -1,0 +1,6 @@
+fixtures:
+  forge_modules:
+    apt: "puppetlabs/apt"
+    stdlib: "puppetlabs/stdlib"
+  symlinks:
+    newrelic_infrastructure: "#{source_dir}"
