@@ -11,7 +11,7 @@ echo "Checking syntax..."
 bundle exec rake syntax
 
 echo "Running specs..."
-bundle exec rspec
+bundle exec rake spec
 
 echo "Running puppet-lint..."
 bundle exec puppet-lint \
