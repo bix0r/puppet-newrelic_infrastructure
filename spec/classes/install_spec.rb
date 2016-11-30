@@ -9,6 +9,7 @@ describe 'newrelic_infrastructure::install' do
       :puppetversion   => Puppet.version,
       :lsbdistid       => 'Ubuntu',
       :lsbdistcodename => 'trusty',
+      :architecture    => 'amd64',
     }
   end
 
@@ -19,6 +20,7 @@ describe 'newrelic_infrastructure::install' do
       :location => 'https://download.newrelic.com/infrastructure_agent/linux/apt',
       :repos    => 'main',
       :release  => 'trusty',
+      :architecture => 'amd64',
       :key      => {
         'id'     => 'A758B3FBCD43BE8D123A3476BB29EE038ECCE87C',
         'source' => 'https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg'
