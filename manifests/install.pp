@@ -1,4 +1,4 @@
-class newrelic_infrastructure::install {
+class newrelic_infrastructure::install inherits newrelic_infrastructure{
   include apt
 
   apt::source { 'newrelic_infrastructure':
@@ -12,7 +12,8 @@ class newrelic_infrastructure::install {
     }
   }
 
-  package { 'newrelic-infra':
-    ensure => installed,
+  package { $newrelic_infrastructure::params::package_name:
+    ensure  => installed,
+    require => Apt::Source['newrelic_infrastructure'],
   }
 }
