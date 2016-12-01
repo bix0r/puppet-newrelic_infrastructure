@@ -1,8 +1,13 @@
 require 'spec_helper'
 
 describe 'newrelic_infrastructure::config' do
+  let(:facts) do {
+    :puppetversion => Puppet.version
+  }
+  end
+
   context 'without a license key' do
-    it { should raise_error(Puppet::ParseError, /License key cannot be empty/) }
+    it { should raise_error(Puppet::Error, /License key cannot be empty/) }
   end
 
   context 'with a valid license key' do
@@ -13,6 +18,14 @@ describe 'newrelic_infrastructure::config' do
     it { should contain_file('/etc/newrelic-infra.yml').with_content(/^license_key:\s/) }
   end
 
+  context 'must not contain starting ---' do
+    let(:params) do
+      {:license_key => 'abc123'}
+    end
+
+    it { should contain_file('/etc/newrelic-infra.yml').without_content(/^---\s*\n/) }
+  end
+
   context 'with non-integer verbose' do
     let(:params) do
       {
@@ -20,7 +33,7 @@ describe 'newrelic_infrastructure::config' do
           :verbose => true
       }
     end
-    it { should raise_error(Puppet::ParseError, /validate_integer/) }
+    it { should raise_error(Puppet::Error, /validate_integer/) }
   end
 
   context 'with verbose' do
@@ -32,7 +45,7 @@ describe 'newrelic_infrastructure::config' do
     end
 
     it { should contain_file('/etc/newrelic-infra.yml')
-                    .with_content(/^license_key: abc123\nverbose: 1\n/)
+                    .with_content(/^license_key: abc123\nverbose: "?1"?\n/)
     }
   end
 
@@ -43,7 +56,7 @@ describe 'newrelic_infrastructure::config' do
           :display_name => true,
       }
     end
-    it { should raise_error(Puppet::ParseError, /is not a string/) }
+    it { should raise_error(Puppet::Error, /is not a string/) }
   end
 
   context 'with display_name' do
@@ -66,7 +79,7 @@ describe 'newrelic_infrastructure::config' do
           :proxy => true,
       }
     end
-    it { should raise_error(Puppet::ParseError, /is not a string/) }
+    it { should raise_error(Puppet::Error, /is not a string/) }
   end
 
   context 'with proxy' do
@@ -89,7 +102,7 @@ describe 'newrelic_infrastructure::config' do
           :log_file => true,
       }
     end
-    it { should raise_error(Puppet::ParseError, /is not a string/) }
+    it { should raise_error(Puppet::Error, /is not a string/) }
   end
 
   context 'with log_file' do
@@ -112,7 +125,7 @@ describe 'newrelic_infrastructure::config' do
           :custom_attributes => true,
       }
     end
-    it { should raise_error(Puppet::ParseError, /is not a Hash/) }
+    it { should raise_error(Puppet::Error, /is not a Hash/) }
   end
 
   context 'with custom_attributes' do
@@ -127,7 +140,7 @@ describe 'newrelic_infrastructure::config' do
     end
 
     it { should contain_file('/etc/newrelic-infra.yml')
-                    .with_content(/^license_key: abc123\ncustom_attributes:\n\s+test_key1: test1\n\s+test_key2: test2\n/)
+                    .with_content(/^license_key: abc123\ncustom_attributes:\s?\n\s+test_key1: test1\n\s+test_key2: test2\n/)
     }
   end
 end

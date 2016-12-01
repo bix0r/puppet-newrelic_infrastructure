@@ -27,17 +27,30 @@ class newrelic_infrastructure::config(
   }
 
   $hash = delete_undef_values({
-    license_key => $license_key,
-    display_name => $display_name,
-    proxy => $proxy,
-    verbose => $verbose,
-    log_file => $log_file,
+    license_key       => $license_key,
+    display_name      => $display_name,
+    proxy             => $proxy,
+    verbose           => $verbose,
+    log_file          => $log_file,
     custom_attributes => $custom_attributes,
   })
 
+  # NewRelic-infra does not like the starting hyphens, so we must strip those out
+  $hyphenFix = '.gsub(/--- ?\n/, "")'
+
+  # YAML.dump and to_yaml were monkey_patched in Puppet < 4.0 resulting in "strange" yaml
+  if (versioncmp($::puppetversion, '4.0') < 1 ) {
+    $indentFix = '.gsub(/^  /, "")'
+  }
+  else {
+    $indentFix = ''
+  }
+  $config = inline_template("<%= @hash.to_yaml${hyphenFix}${indentFix} %>")
+
   file { $newrelic_infrastructure::params::config_file:
     ensure  => file,
-    content => inline_template('<%= @hash.to_yaml %><%= "\n" %>'),
+    content => "$config\n",
     notify  => Service[$newrelic_infrastructure::params::service_name],
   }
 }
+
