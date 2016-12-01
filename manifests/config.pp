@@ -5,7 +5,7 @@ class newrelic_infrastructure::config(
   $verbose = undef,
   $log_file = undef,
   $custom_attributes = undef,
-) {
+) inherits newrelic_infrastructure {
 
   if ($license_key == '') {
     fail('License key cannot be empty.')
@@ -35,8 +35,9 @@ class newrelic_infrastructure::config(
     custom_attributes => $custom_attributes,
   })
 
-  file { '/etc/newrelic-infra.yml':
+  file { $newrelic_infrastructure::params::config_file:
     ensure  => file,
     content => inline_template('<%= @hash.to_yaml %><%= "\n" %>'),
+    notify  => Service[$newrelic_infrastructure::params::service_name],
   }
 }
