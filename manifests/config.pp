@@ -26,18 +26,17 @@ class newrelic_infrastructure::config(
     validate_hash($custom_attributes)
   }
 
-  $hash = {
+  $hash = delete_undef_values({
     license_key => $license_key,
     display_name => $display_name,
     proxy => $proxy,
     verbose => $verbose,
     log_file => $log_file,
     custom_attributes => $custom_attributes,
-  }
+  })
 
   file { '/etc/newrelic-infra.yml':
     ensure  => file,
-    # not sure why "compact" is not available here, so using select
-    content => inline_template('<%= @hash.select{|_, value| !value.nil?}.to_yaml %>'),
+    content => inline_template('<%= @hash.to_yaml %><%= "\n" %>'),
   }
 }
