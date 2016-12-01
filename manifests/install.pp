@@ -15,7 +15,7 @@ class newrelic_infrastructure::install inherits newrelic_infrastructure{
 
   package { $newrelic_infrastructure::params::package_name:
     ensure  => installed,
-    require => Apt::Source['newrelic_infrastructure'],
-    notify => Service[$newrelic_infrastructure::params::service_name],
+    require => [Apt::Source['newrelic_infrastructure'], Class['apt::update']],
+    notify  => Service[$newrelic_infrastructure::params::service_name],
   }
 }
