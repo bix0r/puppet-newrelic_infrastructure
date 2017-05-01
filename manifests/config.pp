@@ -4,6 +4,7 @@ class newrelic_infrastructure::config(
   $proxy = undef,
   $verbose = undef,
   $log_file = undef,
+  $facter_interval_sec = undef,
   $custom_attributes = undef,
 ) inherits newrelic_infrastructure {
 
@@ -27,12 +28,13 @@ class newrelic_infrastructure::config(
   }
 
   $hash = delete_undef_values({
-    license_key       => $license_key,
-    display_name      => $display_name,
-    proxy             => $proxy,
-    verbose           => $verbose,
-    log_file          => $log_file,
-    custom_attributes => $custom_attributes,
+    license_key         => $license_key,
+    display_name        => $display_name,
+    proxy               => $proxy,
+    verbose             => $verbose,
+    log_file            => $log_file,
+    facter_interval_sec => $facter_interval_sec,
+    custom_attributes   => $custom_attributes,
   })
 
   # NewRelic-infra does not like the starting hyphens, so we must strip those out
